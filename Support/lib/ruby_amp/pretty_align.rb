@@ -42,7 +42,47 @@ module RubyAMP::PrettyAlign
       
       output.join("\n")
     else
+      line_hashes = []
+      max_tokens = 0
+      
+      input.split(/\n/, -1).each do |line|
+        split_line = line.scan(/(.+?)([,!~=><\*&\|\/\-\+%]+)(.+?|$)/)
+        split_line[-1][-1] << line[split_line.to_s.size..-1] unless split_line.to_s.size == line.size
+        tokens     = split_line.map { |e| e[1] }
+        max_tokens = tokens.size if tokens.size > max_tokens
+        line_hashes << {:line => split_line, :tokens => tokens}
+      end
+      
+      0.upto(max_tokens - 1) do |token_num|
+        next if line_hashes.map { |l| l[:tokens][token_num] }.compact.uniq.size > 1
+        max_left      = line_hashes.inject(0) { |max, l| l[:line][token_num] && size = l[:line][token_num][0].size; max = size if (size||0) > max; max }
+        max_separator = line_hashes.inject(0) { |max, l| l[:line][token_num] && size = l[:line][token_num][1].size; max = size if (size||0) > max; max }
+        line_hashes.each do |l|
+          if l[:line][token_num]
+            left  = l[:line][token_num][0]
+            sep   = l[:line][token_num][1]
+            right = l[:line][token_num][2]
+          end
+          if sep == ','
+            l[:line][token_num] = format("%s%-#{max_left - left.size + 1}s%s", left, sep, right)
+          else
+            l[:line][token_num] = format("%-#{max_left}s%-#{max_separator}s%s", left, sep, right)
+          end
+        end
+      end
+      
+      line_hashes.map { |l| l[:line].join.rstrip }.join("\n")
+    end
+  rescue Exception => e
+    if testing?
+      raise e 
+    else
       input
     end
+  end
+  
+  def testing?; @testing; end
+  def testing=(boolean)
+    @testing = boolean
   end
 end

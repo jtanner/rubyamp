@@ -3,40 +3,46 @@ require File.dirname(__FILE__) + "/../spec_helper.rb"
 describe RubyAMP::PrettyAlign do
   include RubyAMP::PrettyAlign
   
+  before(:each) do
+    self.testing = true
+  end
+  
   it "should align at a given text sequence" do
-    input = <<EOF
-when "this string" then value
-when "other string" then value
-EOF
-    expected = <<EOF
-when "this string"  then value
-when "other string" then value
-EOF
+    input = <<-EOF
+      when "this string" then value
+      when "other string" then value
+    EOF
+    expected = <<-EOF
+      when "this string"  then value
+      when "other string" then value
+    EOF
     pretty_align(input, "then").should == expected
   end
   
   it "should align at a given operator" do
-    input = <<EOF
-:apples => "A delicious fruit",
-:cats => "A wonderful speed bump"
-EOF
-    expected = <<EOF
-:apples => "A delicious fruit",
-:cats   => "A wonderful speed bump"
-EOF
+    input = <<-EOF
+      :apples => "A delicious fruit",
+      :cats => "A wonderful speed bump"
+    EOF
+    expected = <<-EOF
+      :apples => "A delicious fruit",
+      :cats   => "A wonderful speed bump"
+    EOF
     pretty_align(input, "=>").should == expected
   end
   
-  it "should align only at the first occurrence of each match" do
-    input = <<EOF
-:name => "Billy bob thorton",
-:options => {:backflip => true}
-EOF
-    expected = <<EOF
-:name    => "Billy bob thorton",
-:options => {:backflip => true}
-EOF
-    pretty_align(input, "=>").should == expected
+  it "should align at each occurrence of the match" do
+    input = <<-EOF
+      :a => "Apple", :b => "Butterfly", :c => "Creation",
+      :d => "Dog", :e => "Eel", :f => "Frog", :g => "Garbage",
+      :h => "Hydrogen", :i => "Igloo", :j => "Jack Rabbit"
+    EOF
+    expected = <<-EOF
+      :a => "Apple",    :b => "Butterfly", :c => "Creation",
+      :d => "Dog",      :e => "Eel",       :f => "Frog",     :g => "Garbage",
+      :h => "Hydrogen", :i => "Igloo",     :j => "Jack Rabbit"
+    EOF
+    pretty_align(input).should == expected
   end
   
   it "should accept strings or regexps" do
