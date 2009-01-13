@@ -1,11 +1,10 @@
 require File.dirname(__FILE__) + "/../spec_helper.rb"
 
+ENV['RUBYAMP_TESTING'] = 'true'
+
 describe RubyAMP::PrettyAlign do
   include RubyAMP::PrettyAlign
   
-  before(:each) do
-    self.testing = true
-  end
   
   it "should align at a given text sequence" do
     input = <<-EOF
@@ -43,6 +42,7 @@ describe RubyAMP::PrettyAlign do
       :h => "Hydrogen", :i => "Igloo",     :j => "Jack Rabbit"
     EOF
     pretty_align(input).should == expected
+    pretty_align(input, '/=.?|,/').should == expected
   end
   
   it "should accept strings or regexps" do
