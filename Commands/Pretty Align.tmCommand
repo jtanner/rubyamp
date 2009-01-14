@@ -18,7 +18,7 @@ if input.empty?
   puts "Please select something"
   exit_show_tool_tip
 end
-separator = TextMate::UI.request_string(:title =&gt; "Pretty Align", :prompt =&gt; "Blank, a string, or a regexp (like /=.?/)", :default =&gt; "")
+separator = TextMate::UI.request_string(:title =&gt; "Pretty Align", :prompt =&gt; "String, or regular expression (like /=.?/)", :default =&gt; RubyAMP::PrettyAlign::COMMON_SEPARATORS.inspect)
 
 $stdout &lt;&lt; pretty_align(input,separator)
 
