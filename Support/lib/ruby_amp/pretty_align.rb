@@ -1,5 +1,5 @@
 module RubyAMP::PrettyAlign
-  COMMON_SEPARATORS = '[,!~=><\*&\|\/\-\+%]+'
+  COMMON_SEPARATORS = /[,!~=><\*&\|\/\-\+%]+/
   
   def pretty_align(input, separator_str=nil)
     input ||= ""
