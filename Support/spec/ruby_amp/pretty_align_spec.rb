@@ -30,6 +30,15 @@ EOF
     pretty_align(input, "=>").should == expected
   end
   
+  it "should not modify something that's already aligned" do
+    input = <<-EOF
+    has_many :children,           :through     => :event_links_as_parent
+    has_many :direct_billables,   :foreign_key => 'event_id',                :class_name => 'Billable', :dependent => :destroy
+    has_many :indirect_billables, :through     => :billable_engaging_events, :source     => :billable,  :dependent => :destroy
+    EOF
+    pretty_align(input).should == input
+  end
+  
   it "should align at each occurrence of the match" do
     input = <<-EOF
       :a => "Apple", :b => "Butterfly", :c => "Creation",

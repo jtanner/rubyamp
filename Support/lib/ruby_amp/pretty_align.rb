@@ -29,6 +29,7 @@ module RubyAMP::PrettyAlign
     
     0.upto(max_separators - 1) do |token_num|
       next if lines.map { |l| separators[token_num] }.compact.uniq.size > 1
+      lines.each { |l| l[token_num][0].lstrip! if l[token_num] && token_num != 0 }
       max_left      = lines.inject(0) { |max, l| l[token_num] && size = l[token_num][0].size; max = size if (size||0) > max; max }
       max_separator = lines.inject(0) { |max, l| l[token_num] && l[token_num][1] && size = l[token_num][1].size; max = size if (size||0) > max; max }
       lines.each do |l|
