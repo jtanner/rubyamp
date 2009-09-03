@@ -30,7 +30,7 @@ ${TM_RUBY:-ruby} /tmp/ruby-amp-$$.rb; exit_status=$?; rm /tmp/ruby-amp-$$.rb; ex
 	<key>input</key>
 	<string>selection</string>
 	<key>keyEquivalent</key>
-	<string>^b</string>
+	<string>^@b</string>
 	<key>name</key>
 	<string>Debug - Set Breakpoint at Current Line</string>
 	<key>output</key>
